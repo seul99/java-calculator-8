@@ -11,21 +11,35 @@ public class Calculator {
             return 0;
         }
 
+        // 문자 입력 시 줄바꿈
         input = input.replace("\\n", "\n");
 
         // 기본 구분자
         String[] numbers = input.split(",|:");
 
-//        int sum = 0;
+
         Matcher m = Pattern.compile("//(.)\n(.*)").matcher(input);
         if (m.find()) {
             String customDelimiter = m.group(1);
-             numbers= m.group(2).split(customDelimiter);
+             numbers= m.group(2).split(Pattern.quote(customDelimiter));
         }
 
+        //덧셈기능 구현
         int sum = 0;
-        for (String number : numbers){
-            int num = Integer.parseInt(number);
+        for (String n : numbers){
+            n = n.trim();
+
+            //숫자인지 검사
+            if (!n.matches("-?\\d+")){
+                throw new IllegalArgumentException("입력된 값은 숫자가 아닙니다." + n);
+            }
+
+
+            int num = Integer.parseInt(n);
+
+            if (num < 0){
+                throw new IllegalArgumentException("음수는 입력이 불가합니다." + n);
+            }
             sum += num;
         }
 
